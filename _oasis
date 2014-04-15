@@ -1,0 +1,96 @@
+OASISFormat: 0.4
+Name: ocaml-z3
+Version: 0.1
+Synopsis: OCaml bindings for z3.
+License: https://z3.codeplex.com/license
+Authors: Z3's authors
+
+Plugins: META (0.3), DevFiles (0.3)
+
+
+AlphaFeatures: compiled_setup_ml
+BuildTools: ocamlbuild
+
+## The official z3 binding ##
+
+Flag binding
+  Description: Build (or not) the official binding
+  Default: false
+
+Flag optiz3
+  Description: Assume (or not) the availability of optiz3.
+  Default: false
+
+Library z3
+  Path: ocamlz3
+  Build$: flag(binding)
+  Modules:
+    Z3, Z3enums, Z3native
+  CSources: z3native_stubs.c
+  CCLib: -lz3
+  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
+  CompiledObject: best
+  BuildDepends: num
+
+## Improvements ##
+
+# A well-typed ast, with conversion functions #
+Library z3ast
+  Path: z3ast
+  Modules: ZZ3
+  BuildDepends: z3
+  CompiledObject: best
+
+Library z3ast_optiz3
+  FindlibName: optiz3
+  FindlibParent: z3ast
+  Build$: flag(optiz3)
+  Path: z3ast
+  Modules: ZZ3Optiz3
+  BuildDepends: z3, z3ast
+  CompiledObject: best
+
+## Tests ##
+
+Executable test_simple
+  Path: test
+  Build$: flag(tests)
+  Install: false
+  MainIs: simple.ml
+  BuildDepends: z3, z3ast
+  CCLib: -lz3
+  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
+  CompiledObject: best
+
+Test simple
+  Command: $test_simple
+  TestTools: test_simple
+  Run$: flag(tests)
+
+# Only for optiz3 #
+Executable test_optiz3
+  Path: test
+  Build$: flag(tests) && flag(optiz3)
+  Install: false
+  MainIs: optiz3.ml
+  BuildDepends: z3, z3ast
+  CCLib: -lz3
+  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
+  CompiledObject: best
+
+Test optiz3
+  Command: $test_optiz3
+  TestTools: test_optiz3
+  Run$: flag(tests) && flag(optiz3)
+
+
+## Doc ##
+
+Document api
+  Title: API reference for Z3
+  Type: ocamlbuild (0.3)
+  Install: false
+  InstallDir: $htmldir/api
+  BuildTools: ocamldoc
+  XOCamlbuildPath: .
+  XOCamlbuildLibraries: z3, z3ast

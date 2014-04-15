@@ -1,0 +1,8 @@
+S foo
+S src
+S add
+
+B _build
+B _build/src
+B _build/add
+B _build/foo
