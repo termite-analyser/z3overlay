@@ -194,6 +194,41 @@ and of_num_expr t : [> znum ] t =
 
   else raise (Not_handled t)
 
+(** {2 Aux functions} *)
+
+let rec size : type a . a t -> int = function
+  | S s -> 1
+  | Eq (_, x,y) -> 1 + size x + size y
+  | Distinct (_,t) -> List.fold_left (fun x y -> x + size y) 1 t
+  | Ite (b, then_, else_) -> 1 + size b + size else_ + size then_
+
+  | I _ -> 1
+  | Q _ -> 1
+  | I2Q t -> size t
+  | Q2I t -> size t
+
+  | True -> 1
+  | False -> 1
+  | And t -> List.fold_left (fun x y -> x + size y) 1 t
+  | Or t -> List.fold_left (fun x y -> x + size y) 1 t
+  | Not t -> 1 + size t
+  | Imply (t1,t2) -> 1 + size t1 + size t2
+  | Iff (t1,t2) ->  1 + size t1 + size t2
+  | Xor (t1,t2) -> 1 + size t1 + size t2
+
+  | Ge (t1,t2) -> 1 + size t1 + size t2
+  | Le (t1,t2) -> 1 + size t1 + size t2
+  | Gt (t1,t2) -> 1 + size t1 + size t2
+  | Lt (t1,t2) -> 1 + size t1 + size t2
+
+  | Neg t -> 1 + size t
+  | Add t -> 1 + List.fold_left (fun x y -> x + size y) 1 t
+  | Sub t -> 1 + List.fold_left (fun x y -> x + size y) 1 t
+  | Mul t -> 1 + List.fold_left (fun x y -> x + size y) 1 t
+
+  | Div (t1,t2) -> 1 + size t1 + size t2
+  | Mod (t1,t2) -> 1 + size t1 + size t2
+
 
 (** {2 Handy overlay functions} *)
 
