@@ -47,7 +47,8 @@ and _ t =
   | Mul : ([< znum ] as 'a) t list -> 'a t
 
   | Div : (([< znum ] as 'a) t * 'a t) -> 'a t
-  | Mod : [< zint ] t * [< zint ] t -> [> zint ] t
+  | Mod : ([< zint ] t * [< zint ] t) -> [> zint ] t
+  | Rem : ([< znum ] t * [< znum ] t) -> [> znum ] t
 
 
 module T = struct
@@ -75,6 +76,7 @@ module T = struct
   let ( / ) x y = Div (x, y)
 
   let ( mod ) x y = Mod (x,y)
+  let rem x y = Rem (x,y)
 
 end
 
@@ -127,6 +129,7 @@ let rec to_expr : type a . ctx:Z3.context -> a t -> Z3.Expr.expr = fun ~ctx t ->
     | Div (t1,t2) -> mk_div ctx (to_expr ~ctx t1) (to_expr ~ctx t2)
 
     | Mod (t1,t2) -> Integer.mk_mod ctx (to_expr ~ctx t1) (to_expr ~ctx t2)
+    | Rem (t1,t2) -> Integer.mk_rem ctx (to_expr ~ctx t1) (to_expr ~ctx t2)
 
 
 
@@ -228,6 +231,7 @@ let rec size : type a . a t -> int = function
 
   | Div (t1,t2) -> 1 + size t1 + size t2
   | Mod (t1,t2) -> 1 + size t1 + size t2
+  | Rem (t1,t2) -> 1 + size t1 + size t2
 
 
 (** {2 Handy overlay functions} *)
