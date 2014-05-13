@@ -38,7 +38,7 @@ Library z3
 Library z3ast
   Path: z3ast
   Modules: ZZ3
-  BuildDepends: z3
+  BuildDepends: z3, zarith
   CompiledObject: best
 
 Library z3ast_optiz3

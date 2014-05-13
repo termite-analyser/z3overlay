@@ -8,10 +8,10 @@ type znum = [ zint | zreal ]
 type zany = [ zint | zbool | zreal ]
 
 type (_, _) typ =
-  | Int : (int, [> zint]) typ
+  | Int : (Z.t, [> zint]) typ
   | Bool : (bool, [> zbool]) typ
-  | Real : (int * int, [> zreal]) typ
-  | Num : (int * int, [> znum] ) typ
+  | Real : (Q.t, [> zreal]) typ
+  | Num : (Q.t, [> znum] ) typ
 
 type ('a,'b) symbol = ('a,'b) typ * Expr.expr
 
@@ -22,9 +22,10 @@ and _ t =
   | Distinct : ((_,'a) typ * 'a t list) -> [> zbool] t
   | Ite : [< zbool ] t * ([< zany ] as 'a) t * 'a t -> 'a t
 
-  | I : int -> [> zint ] t
-  | Q : int * int -> [> zreal ] t
+  | I : Z.t -> [> zint ] t
+  | Q : Q.t -> [> zreal ] t
   | I2Q : [< zint ] t -> [> zreal ] t
+  | Q2I : [< zreal ] t -> [> zint ] t
 
   | True : [> zbool ] t
   | False : [> zbool ] t
@@ -46,7 +47,6 @@ and _ t =
   | Mul : ([< znum ] as 'a) t list -> 'a t
 
   | Div : (([< znum ] as 'a) t * 'a t) -> 'a t
-
   | Mod : [< zint ] t * [< zint ] t -> [> zint ] t
 
 
@@ -100,9 +100,10 @@ let rec to_expr : type a . ctx:Z3.context -> a t -> Z3.Expr.expr = fun ~ctx t ->
     | Ite (b, then_, else_) ->
         mk_ite ctx (to_expr ~ctx b) (to_expr ~ctx then_) (to_expr ~ctx else_)
 
-    | I i -> Integer.mk_numeral_i ctx i
-    | Q (n,d) -> Real.mk_numeral_nd ctx n d
-    | I2Q t -> to_expr ~ctx t
+    | I i -> Integer.mk_numeral_s ctx @@ Z.to_string i
+    | Q x -> Real.mk_numeral_s ctx @@ Q.to_string x
+    | I2Q t -> Integer.mk_int2real ctx @@ to_expr ~ctx t
+    | Q2I t -> Real.mk_real2int ctx @@ to_expr ~ctx t
 
     | True -> mk_true ctx
     | False -> mk_false ctx
@@ -181,11 +182,9 @@ and of_bool_expr t : zbool t =
 and of_num_expr t : [> znum ] t =
   let open Expr in
   let open Arithmetic in
-  if is_int_numeral t then I (Integer.get_int t)
+  if is_int_numeral t then I (Z.of_string @@ Integer.to_string t)
   else if is_arithmetic_numeral t then
-    let n = Integer.get_int @@ Real.get_numerator t in
-    let d = Integer.get_int @@ Real.get_denominator t in
-    Q (n,d)
+    Q (Q.of_string @@ Real.to_string t)
 
   else if is_uminus t then Neg (of_num_expr t)
   else if is_add t then Add (List.map of_num_expr @@ get_args t)
@@ -234,7 +233,7 @@ let get_value (type a) (type b) ~model ((ty,t) : (a, b) symbol) : a =
     | Some x -> x
   in
   match ty with
-  | Int -> Arithmetic.Integer.get_int x
+  | Int -> Z.of_string @@ Arithmetic.Integer.to_string x
   | Bool -> bool_of_lbool @@ Boolean.get_bool_value x
-  | Real -> get_real x
-  | Num -> get_real x
+  | Real -> Q.of_string @@ Arithmetic.Real.to_string x
+  | Num -> Q.of_string @@ Arithmetic.Real.to_string x

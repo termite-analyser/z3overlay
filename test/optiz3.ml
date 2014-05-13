@@ -2,9 +2,6 @@ open Z3
 open ZZ3
 open ZZ3Optiz3
 
-let foo (x,y) =
-  float_of_int x /. float_of_int y
-
 let _ =
 
   let ctx = mk_context [] in
@@ -14,8 +11,8 @@ let _ =
   let y = decl_const ~ctx Real "y" in
   let z = decl_const ~ctx Real "z" in
 
-  let t = T.( !y <= I 3 && !x + !y <= Q (5,2)) in
-  let t' = T.( !z = I 2 * !y + !x ) in
+  let t = T.( !y <= I Z.(~$ 3) && !x + !y <= Q Q.(5 // 2)) in
+  let t' = T.( !z = I Z.(~$ 2) * !y + !x ) in
 
   let optim = T.(!z) in
 
@@ -31,5 +28,5 @@ let _ =
   let vy = get_value ~model y in
   let vx = get_value ~model x in
 
-  Printf.printf "y = %f \nx = %f\n" (foo vy) (foo vx) ;
+  Printf.printf "y = %s \nx = %s\n" (Q.to_string vy) (Q.to_string vx) ;
   if unbound then print_endline "Unbounded"

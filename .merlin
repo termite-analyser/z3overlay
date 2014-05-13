@@ -1,8 +1,13 @@
-S foo
-S src
-S add
+S ocamlz3
+S opt
+S z3ast
+S test
 
 B _build
-B _build/src
-B _build/add
-B _build/foo
+B _build/ocamlz3
+B _build/opt
+B _build/z3ast
+B _build/test
+
+PKG num
+PKG zarith

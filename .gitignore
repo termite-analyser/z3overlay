@@ -5,3 +5,7 @@ setup.log
 setup.exe
 
 *.native
+*.byte
+*.docdir
+
+ocamlz3
