@@ -1,4 +1,4 @@
-open Utils
+open ZZ3Utils
 open Z3
 
 module Make (M : ZZ3_sigs.S) = struct

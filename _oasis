@@ -37,7 +37,7 @@ Library z3
 # A well-typed ast, with conversion functions #
 Library z3overlay
   Path: z3overlay
-  InternalModules: Utils
+  InternalModules: ZZ3Utils
   Modules: ZZ3, ZZ3_sigs
   BuildDepends: z3, zarith
   CompiledObject: best
@@ -47,7 +47,7 @@ Library z3overlay_optiz3
   FindlibParent: z3overlay
   Build$: flag(optiz3)
   Path: z3overlay
-  InternalModules: Utils
+  InternalModules: ZZ3Utils
   Modules: ZZ3Optiz3
   BuildDepends: z3, z3overlay
   CompiledObject: best

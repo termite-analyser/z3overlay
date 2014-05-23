@@ -1,4 +1,4 @@
-open Utils
+open ZZ3Utils
 open Z3
 open ZZ3_sigs
 
