@@ -35,19 +35,21 @@ Library z3
 ## Improvements ##
 
 # A well-typed ast, with conversion functions #
-Library z3ast
-  Path: z3ast
-  Modules: ZZ3
+Library z3overlay
+  Path: z3overlay
+  InternalModules: Utils
+  Modules: ZZ3, ZZ3_sigs
   BuildDepends: z3, zarith
   CompiledObject: best
 
-Library z3ast_optiz3
+Library z3overlay_optiz3
   FindlibName: optiz3
-  FindlibParent: z3ast
+  FindlibParent: z3overlay
   Build$: flag(optiz3)
-  Path: z3ast
+  Path: z3overlay
+  InternalModules: Utils
   Modules: ZZ3Optiz3
-  BuildDepends: z3, z3ast
+  BuildDepends: z3, z3overlay
   CompiledObject: best
 
 ## Tests ##
@@ -57,7 +59,7 @@ Executable test_simple
   Build$: flag(tests)
   Install: false
   MainIs: simple.ml
-  BuildDepends: z3, z3ast
+  BuildDepends: z3, z3overlay
   CCLib: -lz3
   CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
@@ -73,7 +75,7 @@ Executable test_optiz3
   Build$: flag(tests) && flag(optiz3)
   Install: false
   MainIs: optiz3.ml
-  BuildDepends: z3, z3ast
+  BuildDepends: z3, z3overlay
   CCLib: -lz3
   CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
@@ -93,4 +95,4 @@ Document api
   InstallDir: $htmldir/api
   BuildTools: ocamldoc
   XOCamlbuildPath: .
-  XOCamlbuildLibraries: z3, z3ast
+  XOCamlbuildLibraries: z3, z3overlay
