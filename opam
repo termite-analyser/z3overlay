@@ -1,0 +1,15 @@
+opam-version: "1"
+maintainer: "drupyog@zoho.com"
+authors: ["Z3 authors"]
+homepage: "https://z3.codeplex.com/"
+license: "https://z3.codeplex.com/license"
+build: [
+  ["./configure" "--prefix" prefix]
+  [make]
+  [make "install"]
+]
+build-doc: [[make "docs"]]
+remove: [
+  ["ocamlfind" "remove" "z3"]
+  ["ocamlfind" "remove" "z3overlay"]
+]
