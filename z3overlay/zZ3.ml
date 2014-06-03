@@ -19,26 +19,28 @@ module Make (C : Context) = struct
     | Real : (Q.t, [> zreal]) typ
     | Num : (Q.t, [> znum] ) typ
 
+  type +'a term = Z3.Expr.expr
+
+  type ('a,'b) symbol = ('a,'b) typ * Expr.expr
 
   module Symbol = struct
 
-    type ('a,'b) t = ('a,'b) typ * Expr.expr
-
     let get_typ = fst
 
-    let declare (type a) (type b) (ty : (a,b) typ) s : (a,b) t =
+    let declare (type a) (type b) (ty : (a,b) typ) s : (a,b) symbol =
       match ty with
         | Int -> Int, Arithmetic.Integer.mk_const_s ctx s
         | Bool -> Bool, Boolean.mk_const_s ctx s
         | Real -> Real, Arithmetic.Real.mk_const_s ctx s
         | Num -> Num, Arithmetic.Real.mk_const_s ctx s
 
-    let trustme (type a) (type b) (ty : (a,b) typ) e : (a,b) t =
+    let term (type a) (type b) (ty : (a,b) typ) (e : b term) : (a,b) symbol =
+      (ty, e)
+
+    let trustme (type a) (type b) (ty : (a,b) typ) e : (a,b) symbol =
       (ty, e)
 
   end
-
-  type +'a t = Z3.Expr.expr
 
   module T = struct
     let symbol s = snd s
@@ -136,7 +138,7 @@ module Make (C : Context) = struct
       | Z3enums.L_FALSE -> false
       | Z3enums.L_UNDEF -> raise (Z3.Error "lbool")
 
-    let get_value (type a) (type b) ~model ((ty,t) : (a, b) Symbol.t) : a =
+    let get_value (type a) (type b) ~model ((ty,t) : (a, b) symbol) : a =
       let x = match Model.eval model t true with
         | None -> raise (No_value t)
         | Some x -> x

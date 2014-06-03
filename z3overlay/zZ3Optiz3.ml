@@ -9,7 +9,7 @@ module Make (M : ZZ3_sigs.S) = struct
     | Z3enums.L_TRUE -> true
     | _ -> false
 
-  let check ~solver (criteria : M.znum M.t) b =
+  let check ~solver (criteria : M.znum M.term) b =
     let open Z3.Solver in
     let (v, b) = check_opti solver (criteria :> Expr.expr) b in
     let v = match v with
