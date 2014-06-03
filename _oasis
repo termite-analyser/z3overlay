@@ -2,8 +2,8 @@ OASISFormat: 0.4
 Name: ocaml-z3
 Version: 0.1
 Synopsis: OCaml bindings for z3.
-License: https://z3.codeplex.com/license
-Authors: Z3's authors
+License: MIT
+Authors: Gabriel Radanne
 
 Plugins: META (0.3), DevFiles (0.3)
 
