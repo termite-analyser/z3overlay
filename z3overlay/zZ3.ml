@@ -102,6 +102,12 @@ module Make (C : Context) = struct
 
     let ( mod ) x y = mod_ x y
 
+    let simplify ?params t = Expr.simplify t params
+
+    let to_string t = Expr.to_string t
+
+    let raw t = t
+
   end
 
 

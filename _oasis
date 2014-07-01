@@ -46,8 +46,7 @@ Library z3overlay_optiz3
   FindlibName: optiz3
   FindlibParent: z3overlay
   Build$: flag(optiz3)
-  Path: z3overlay
-  InternalModules: ZZ3Utils
+  Path: optiz3
   Modules: ZZ3Optiz3
   BuildDepends: z3, z3overlay
   CompiledObject: best
@@ -75,7 +74,7 @@ Executable test_optiz3
   Build$: flag(tests) && flag(optiz3)
   Install: false
   MainIs: optiz3.ml
-  BuildDepends: z3, z3overlay
+  BuildDepends: z3, z3overlay.optiz3
   CCLib: -lz3
   CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
@@ -95,4 +94,4 @@ Document api
   InstallDir: $htmldir/api
   BuildTools: ocamldoc
   XOCamlbuildPath: .
-  XOCamlbuildLibraries: z3, z3overlay
+  XOCamlbuildLibraries: z3, z3overlay, z3overlay.optiz3

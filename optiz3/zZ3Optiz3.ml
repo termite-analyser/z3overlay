@@ -1,5 +1,8 @@
-open ZZ3Utils
 open Z3
+
+let opt_get = function
+  | None -> raise @@ Z3.Error "opt_get"
+  | Some x -> x
 
 module Make (M : ZZ3_sigs.S) = struct
 

@@ -44,6 +44,7 @@ module type S = sig
   module T : sig
 
     val symbol : (_,'a) symbol -> 'a term
+    val simplify : ?params:Params.params -> 'a term -> 'a term
     val eq : 'a term -> 'a term -> [> zbool] term
     val distinct : 'a term list -> [> zbool] term
     val ite : [< zbool ] term -> ([< zany ] as 'a) term -> 'a term -> 'a term
@@ -98,6 +99,9 @@ module type S = sig
 
     val ( mod ) : [< zint ] term -> [< zint ] term -> [> zint ] term
 
+
+    val to_string : 'a term -> string
+    val raw : 'a term -> Z3.Expr.expr
 
   end
 
