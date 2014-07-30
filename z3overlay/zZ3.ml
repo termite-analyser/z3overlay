@@ -52,6 +52,7 @@ module Make (C : Context) = struct
 
     let true_       = Boolean.mk_true ctx
     let false_      = Boolean.mk_false ctx
+    let bool b      = if b then true_ else false_
     let and_ t      = Boolean.mk_and ctx t
     let or_ t       = Boolean.mk_or ctx t
     let not t       = Boolean.mk_not ctx t

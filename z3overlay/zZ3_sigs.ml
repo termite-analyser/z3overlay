@@ -56,6 +56,7 @@ module type S = sig
 
     val true_ : [> zbool ] term
     val false_ : [> zbool ] term
+    val bool : bool -> [> zbool ] term
     val and_ : [< zbool ] term list -> [> zbool ] term
     val or_ : [< zbool ] term list -> [> zbool ] term
     val not : [< zbool ] term -> [> zbool ] term
