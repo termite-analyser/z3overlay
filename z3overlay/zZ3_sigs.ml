@@ -49,7 +49,8 @@ module type S = sig
     val distinct : 'a term list -> [> zbool] term
     val ite : [< zbool ] term -> ([< zany ] as 'a) term -> 'a term -> 'a term
 
-    val int : Z.t -> [> zint ] term
+    val int : int -> [> zint ] term
+    val bigint : Z.t -> [> zint ] term
     val rat : Q.t -> [> zreal ] term
     val i2q : [< zint ] term -> [> zreal ] term
     val q2i : [< zreal ] term -> [> zint ] term

@@ -13,8 +13,8 @@ let _ =
   let y = Symbol.declare Real "y" in
   let z = Symbol.declare Real "z" in
 
-  let t = T.( !y <= int Z.(~$ 3) && !x + !y <= rat Q.(5 // 2)) in
-  let t' = T.( !z = int Z.(~$ 2) * !y + !x ) in
+  let t = T.( !y <= int 3 && !x + !y <= rat Q.(5 // 2)) in
+  let t' = T.( !z = int 2 * !y + !x ) in
 
   let optim = T.symbol z in
 

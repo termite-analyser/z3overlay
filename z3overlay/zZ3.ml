@@ -66,8 +66,12 @@ module Make (C : Context) = struct
     let lt t1 t2 = Arithmetic.mk_lt ctx t1 t2
 
     (* We go through strings since we would loss precision otherwise. *)
-    let int i = Arithmetic.Integer.mk_numeral_s ctx @@ Z.to_string i
-    let rat x = Arithmetic.Real.mk_numeral_s ctx @@ Q.to_string x
+    let int i = Arithmetic.Integer.mk_numeral_i ctx i
+    let bigint i = Arithmetic.Integer.mk_numeral_s ctx @@ Z.to_string i
+    let rat x =
+      let s = Q.to_string x in
+      try Arithmetic.Real.mk_numeral_s ctx s
+      with _ -> failwith (Printf.sprintf "Real.mk_numeral_s parse error on %s." s)
     let i2q t = Arithmetic.Integer.mk_int2real ctx t
     let q2i t = Arithmetic.Real.mk_real2int ctx t
 
