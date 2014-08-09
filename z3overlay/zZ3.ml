@@ -13,11 +13,14 @@ module Make (C : Context) = struct
   type znum = [ zint | zreal ]
   type zany = [ zint | zbool | zreal ]
 
+  type ('domain, 'range) zarray = [ `Zarray of ('domain * 'range) ]
+
   type (_, _) typ =
     | Int : (Z.t, [> zint]) typ
     | Bool : (bool, [> zbool]) typ
     | Real : (Q.t, [> zreal]) typ
     | Num : (Q.t, [> znum] ) typ
+    | Array : ('a, 'x) typ * ('b, 'y) typ -> ('a -> 'b, ('x,'y) zarray ) typ
 
   type +'a term = Z3.Expr.expr
 
@@ -27,12 +30,23 @@ module Make (C : Context) = struct
 
     let get_typ = fst
 
+    let rec sort : type a b . (a,b) typ -> Sort.sort =
+      function
+        | Int -> Arithmetic.Integer.mk_sort ctx
+        | Bool -> Boolean.mk_sort ctx
+        | Real -> Arithmetic.Real.mk_sort ctx
+        | Num -> Arithmetic.Real.mk_sort ctx
+        | Array (src,dst) -> Z3Array.mk_sort ctx (sort src) (sort dst)
+
     let declare (type a) (type b) (ty : (a,b) typ) s : (a,b) symbol =
       match ty with
         | Int -> Int, Arithmetic.Integer.mk_const_s ctx s
         | Bool -> Bool, Boolean.mk_const_s ctx s
         | Real -> Real, Arithmetic.Real.mk_const_s ctx s
         | Num -> Num, Arithmetic.Real.mk_const_s ctx s
+        | Array (src,dst) ->
+            Array (src,dst),
+            Z3Array.mk_const_s ctx s (sort src) (sort dst)
 
     let term (type a) (type b) (ty : (a,b) typ) (e : b term) : (a,b) symbol =
       (ty, e)
@@ -113,7 +127,47 @@ module Make (C : Context) = struct
 
     let raw t = t
 
+    let rec with_typ : type a b . (a, b) typ -> a -> b term =
+      fun ty x -> match ty with
+        | Int -> bigint x
+        | Real -> rat x
+        | Num -> rat x
+        | Bool -> bool x
+        | Array (_,_) -> raise @@ Error "Can't reify an array"
+
   end
+
+
+  module Z3Array = struct
+    open Z3Array
+
+    let get a i = mk_select ctx a i
+    let set a i v = mk_store ctx a i v
+
+    let make (Array (src,_)) v =
+      mk_const_array ctx (Symbol.sort src) v
+
+    let default a =
+      mk_term_array ctx a
+
+    let of_array ~typ ~default arr =
+      let a0 = make typ default in
+      Array.fold_left (fun a (k,v) -> set a k v) a0 arr
+
+    let of_indexed ~typ ~default arr =
+      let a0 = make (Array (Int, typ)) default in
+      let n = Array.length arr in
+      let rec aux i a =
+        if i < n then a
+        else aux (i+1) @@ set a (T.int i) arr.(i)
+      in aux 0 a0
+
+    let of_list ~typ ~default arr =
+      let a0 = make typ default in
+      List.fold_left (fun a (k,v) -> set a k v) a0 arr
+
+  end
+
 
 
   type sat =
@@ -150,15 +204,22 @@ module Make (C : Context) = struct
       | Z3enums.L_UNDEF -> raise (Z3.Error "lbool")
 
     let get_value (type a) (type b) ~model ((ty,t) : (a, b) symbol) : a =
-      let x = match Model.eval model t true with
+      let get_val t = match Model.eval model t true with
         | None -> raise (No_value t)
         | Some x -> x
       in
-      match ty with
-        | Int -> Z.of_string @@ Arithmetic.Integer.to_string x
-        | Bool -> bool_of_lbool @@ Boolean.get_bool_value x
-        | Real -> Q.of_string @@ Arithmetic.Real.to_string x
-        | Num -> Q.of_string @@ Arithmetic.Real.to_string x
+      let rec aux : type a b . (a, b) typ -> b term -> a = fun ty t ->
+        match ty with
+          | Int -> Z.of_string @@ Arithmetic.Integer.to_string @@ get_val t
+          | Bool -> bool_of_lbool @@ Boolean.get_bool_value @@ get_val t
+          | Real -> Q.of_string @@ Arithmetic.Real.to_string @@ get_val t
+          | Num -> Q.of_string @@ Arithmetic.Real.to_string @@ get_val t
+          | Array (src, dst) -> begin
+              let f v = aux dst (Z3Array.get t (T.with_typ src v))
+              in f
+            end
+      in aux ty t
+
   end
 
 

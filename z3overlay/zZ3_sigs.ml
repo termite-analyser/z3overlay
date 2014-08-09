@@ -18,11 +18,14 @@ module type S = sig
   type znum = [ zint | zreal ]
   type zany = [ zint | zbool | zreal ]
 
+  type ('domain, 'range) zarray = [ `Zarray of ('domain * 'range) ]
+
   type (_,_) typ =
     | Int : (Z.t, [> zint]) typ
     | Bool : (bool, [> zbool]) typ
     | Real : (Q.t, [> zreal]) typ
     | Num : (Q.t, [> znum] ) typ
+    | Array : ('a, 'x) typ * ('b, 'y) typ -> ('a -> 'b, ('x, 'y) zarray ) typ
 
   type +'a term = private Z3.Expr.expr
 
@@ -101,9 +104,34 @@ module type S = sig
 
     val ( mod ) : [< zint ] term -> [< zint ] term -> [> zint ] term
 
+    val with_typ : ('a, 'b) typ -> 'a -> 'b term
 
     val to_string : 'a term -> string
     val raw : 'a term -> Z3.Expr.expr
+
+  end
+
+  module Z3Array : sig
+    val get : [< ('d, 'r) zarray] term -> 'd term -> 'r term
+
+    val set :
+      [< ('d, 'r) zarray] term -> 'd term -> 'r term -> [> ('d, 'r) zarray] term
+    val make :
+      ('a -> 'b, ('d, 'r) zarray) typ -> 'r term -> [> ('d, 'r) zarray] term
+
+    val default : [< ('d, 'r) zarray] term -> 'r term
+
+    val of_indexed :
+      typ:('a, 'r) typ -> default:'r term ->
+      'r term array -> ([> zint ], 'r) zarray term
+
+    val of_array :
+      typ:('a -> 'b, ('d, 'r) zarray) typ -> default:'r term ->
+      ('d term * 'r term) array -> ('d, 'r) zarray term
+
+    val of_list :
+      typ:('a -> 'b, ('d, 'r) zarray) typ -> default:'r term ->
+      ('d term * 'r term) list -> ('d, 'r) zarray term
 
   end
 
