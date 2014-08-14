@@ -10,6 +10,6 @@ build: [
 ]
 build-doc: [[make "docs"]]
 remove: [
-  ["ocamlfind" "remove" "z3"]
-  ["ocamlfind" "remove" "z3overlay"]
+  ["ocamlfind" "remove" "Z3"]
+  ["ocamlfind" "remove" "Z3overlay"]
 ]

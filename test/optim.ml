@@ -2,7 +2,7 @@ open Z3
 
 
 module ZZ3 = ZZ3.Make (struct let ctx = mk_context [] end)
-module Opti = ZZ3Optiz3.Make (ZZ3)
+module Opti = ZZ3Optim.Make (ZZ3)
 open ZZ3
 
 let _ =

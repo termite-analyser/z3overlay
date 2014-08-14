@@ -17,12 +17,12 @@ Flag binding
   Description: Build (or not) the official binding
   Default: false
 
-Flag optiz3
+Flag optim
   Description: Assume (or not) the availability of optiz3.
   Default: false
 
-Library z3
-  Path: ocamlz3
+Library Z3
+  Path: binding
   Build$: flag(binding)
   Modules:
     Z3, Z3enums, Z3native
@@ -35,20 +35,20 @@ Library z3
 ## Improvements ##
 
 # A well-typed ast, with conversion functions #
-Library z3overlay
-  Path: z3overlay
+Library Z3overlay
+  Path: src
   InternalModules: ZZ3Utils
   Modules: ZZ3, ZZ3_sigs
-  BuildDepends: z3, zarith
+  BuildDepends: Z3, zarith
   CompiledObject: best
 
-Library z3overlay_optiz3
-  FindlibName: optiz3
-  FindlibParent: z3overlay
-  Build$: flag(optiz3)
-  Path: optiz3
-  Modules: ZZ3Optiz3
-  BuildDepends: z3, z3overlay
+Library Z3overlay_optim
+  FindlibName: optim
+  FindlibParent: Z3overlay
+  Build$: flag(optim)
+  Path: src/optim
+  Modules: ZZ3Optim
+  BuildDepends: Z3overlay
   CompiledObject: best
 
 ## Tests ##
@@ -58,7 +58,7 @@ Executable test_simple
   Build$: flag(tests)
   Install: false
   MainIs: simple.ml
-  BuildDepends: z3, z3overlay
+  BuildDepends: Z3overlay
   CCLib: -lz3
   CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
@@ -68,21 +68,21 @@ Test simple
   TestTools: test_simple
   Run$: flag(tests)
 
-# Only for optiz3 #
-Executable test_optiz3
+# Only for optim #
+Executable test_optim
   Path: test
-  Build$: flag(tests) && flag(optiz3)
+  Build$: flag(tests) && flag(optim)
   Install: false
-  MainIs: optiz3.ml
-  BuildDepends: z3, z3overlay.optiz3
+  MainIs: optim.ml
+  BuildDepends: Z3overlay.optim
   CCLib: -lz3
   CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
 
-Test optiz3
-  Command: $test_optiz3
-  TestTools: test_optiz3
-  Run$: flag(tests) && flag(optiz3)
+Test optim
+  Command: $test_optim
+  TestTools: test_optim
+  Run$: flag(tests) && flag(optim)
 
 
 ## Doc ##
@@ -94,4 +94,4 @@ Document api
   InstallDir: $htmldir/api
   BuildTools: ocamldoc
   XOCamlbuildPath: .
-  XOCamlbuildLibraries: z3, z3overlay, z3overlay.optiz3
+  XOCamlbuildLibraries: Z3overlay, Z3overlay.optim

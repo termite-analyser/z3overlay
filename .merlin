@@ -1,10 +1,12 @@
-S ocamlz3
-S z3overlay
+S binding
+S src
+S src/optim
 S test
 
 B _build
-B _build/ocamlz3
-B _build/z3overlay
+B _build/binding
+B _build/src
+B _build/src/optim
 B _build/test
 
 PKG num
