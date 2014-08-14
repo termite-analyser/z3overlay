@@ -59,8 +59,6 @@ Executable test_simple
   Install: false
   MainIs: simple.ml
   BuildDepends: Z3overlay
-  CCLib: -lz3
-  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
 
 Test simple
@@ -75,8 +73,6 @@ Executable test_optim
   Install: false
   MainIs: optim.ml
   BuildDepends: Z3overlay.optim
-  CCLib: -lz3
-  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
   CompiledObject: best
 
 Test optim
