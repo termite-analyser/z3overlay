@@ -11,26 +11,9 @@ Plugins: META (0.3), DevFiles (0.3)
 AlphaFeatures: compiled_setup_ml
 BuildTools: ocamlbuild
 
-## The official z3 binding ##
-
-Flag binding
-  Description: Build (or not) the official binding
-  Default: false
-
 Flag optim
   Description: Assume (or not) the availability of optiz3.
   Default: false
-
-Library Z3
-  Path: binding
-  Build$: flag(binding)
-  Modules:
-    Z3, Z3enums, Z3native
-  CSources: z3native_stubs.c
-  CCLib: -lz3
-  CCOpt: -O2 -Wall -Wextra -Wno-unused-parameter
-  CompiledObject: best
-  BuildDepends: num
 
 ## Improvements ##
 
