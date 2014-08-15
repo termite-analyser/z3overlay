@@ -1,14 +1,17 @@
 opam-version: "1"
 maintainer: "drupyog@zoho.com"
-authors: ["Z3 authors"]
-homepage: "https://z3.codeplex.com/"
-license: "https://z3.codeplex.com/license"
+authors: ["Gabriel Radanne"]
+homepage: "https://github.com/Drup/ocaml-z3"
+license: "MIT"
 build: [
   ["./configure" "--prefix" prefix]
   [make]
   [make "install"]
 ]
 build-doc: [[make "docs"]]
+depends: [
+  "ocamlfind"
+]
 remove: [
   ["ocamlfind" "remove" "Z3overlay"]
 ]

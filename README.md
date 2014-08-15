@@ -9,16 +9,25 @@ This is an overlay to the new OCaml binding.
 
 ## Official bindings
 
-The official bindings propose a target `make ocamlfind_install` but for various reason, it might be useful to proceed differently. It is possible to use this library to build the OCaml official binding by symlinking (or copying) `ocamlz3` to `src/api/ml` and using `configure --enable-binding`.
+To install the official bindings, execute
+```
+python2 scripts/mk_make.py --ml
+cd build
+make -j4
+```
+Go [take a coffee](https://xkcd.com/303/) and then:
+```
+make ocamlfind_install
+```
 
 ## Optiz3
 
-A fork by Arie Gurfinkel ([here](https://z3.codeplex.com/SourceControl/network/forks/arie/optiz3?branch=optiz3) called optiz3 allows to do optimization with solving.
-
-[This fork](https://z3.codeplex.com/SourceControl/network/forks/gradanne/mlopti?branch=optiz3-ml) allows to use the new OCaml binding and the optimization.
+[This fork](https://z3.codeplex.com/SourceControl/network/forks/gradanne/mlopti?branch=optiz3-ml) allows to use the new OCaml binding and an optimizing solver (originally developed by Arie Gurfinkel [here](https://z3.codeplex.com/SourceControl/network/forks/arie/optiz3?branch=optiz3)).
 
 Some additional functions are provided if this fork is used with `./configure --enable-optiz3`
 
+The packages `z3` and `z3overlay` are provided in the [drupam](https://github.com/Drup/drupam) repository.
+Beware that you still need to compile and install the fork of z3 on your system. A good way is to fetch the fork, compile and install it, and pin the repository in opam, then install the opam package.
 
 ## Miscs
 
