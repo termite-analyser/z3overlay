@@ -77,6 +77,7 @@ module type S = sig
     val add : ([< znum ] as 'a) term list -> 'a term
     val sub : ([< znum ] as 'a) term list -> 'a term
     val mul : ([< znum ] as 'a) term list -> 'a term
+    val ixor : [< zint ] term -> [< zint ] term -> [> zint ] term
 
     val div : ([< znum ] as 'a) term -> 'a term -> 'a term
     val mod_ : [< zint ] term -> [< zint ] term -> [> zint ] term

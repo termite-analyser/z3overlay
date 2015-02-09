@@ -95,6 +95,7 @@ module Make (C : Context) = struct
     let sub t = Arithmetic.mk_sub ctx t
     let mul t = Arithmetic.mk_mul ctx t
     let div t1 t2 = Arithmetic.mk_div ctx t1 t2
+    let ixor t1 t2 = BitVector.mk_xor ctx t1 t2
 
     let mod_ t1 t2 = Arithmetic.Integer.mk_mod ctx t1 t2
     let rem t1 t2  = Arithmetic.Integer.mk_rem ctx t1 t2
