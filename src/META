@@ -1,0 +1,22 @@
+# OASIS_START
+# DO NOT EDIT (digest: 69cb1c07a9456cee6409ad75004a4477)
+version = "0.1"
+description = "OCaml bindings for z3."
+requires = "Z3 zarith"
+archive(byte) = "Z3overlay.cma"
+archive(byte, plugin) = "Z3overlay.cma"
+archive(native) = "Z3overlay.cmxa"
+archive(native, plugin) = "Z3overlay.cmxs"
+exists_if = "Z3overlay.cma"
+package "optim" (
+ version = "0.1"
+ description = "OCaml bindings for z3."
+ requires = "Z3overlay"
+ archive(byte) = "Z3overlay_optim.cma"
+ archive(byte, plugin) = "Z3overlay_optim.cma"
+ archive(native) = "Z3overlay_optim.cmxa"
+ archive(native, plugin) = "Z3overlay_optim.cmxs"
+ exists_if = "Z3overlay_optim.cma"
+)
+# OASIS_STOP
+
