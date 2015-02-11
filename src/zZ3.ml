@@ -211,10 +211,10 @@ module Make (C : Context) = struct
       in
       let rec aux : type a b . (a, b) typ -> b term -> a = fun ty t ->
         match ty with
-          | Int -> Z.of_string @@ Arithmetic.Integer.to_string @@ get_val t
+          | Int -> Z.of_string @@ Arithmetic.Integer.numeral_to_string @@ get_val t
           | Bool -> bool_of_lbool @@ Boolean.get_bool_value @@ get_val t
-          | Real -> Q.of_string @@ Arithmetic.Real.to_string @@ get_val t
-          | Num -> Q.of_string @@ Arithmetic.Real.to_string @@ get_val t
+          | Real -> Q.of_string @@ Arithmetic.Real.numeral_to_string @@ get_val t
+          | Num -> Q.of_string @@ Arithmetic.Real.numeral_to_string @@ get_val t
           | Array (src, dst) -> begin
               let f v = aux dst (Z3Array.get t (T.with_typ src v))
               in f
