@@ -6,14 +6,7 @@ License: MIT
 Authors: Gabriel Radanne
 
 Plugins: META (0.3), DevFiles (0.3)
-
-
-AlphaFeatures: compiled_setup_ml
 BuildTools: ocamlbuild
-
-Flag optim
-  Description: Assume (or not) the availability of optiz3.
-  Default: false
 
 ## Improvements ##
 
@@ -23,15 +16,6 @@ Library Z3overlay
   InternalModules: ZZ3Utils
   Modules: ZZ3, ZZ3_sigs
   BuildDepends: Z3, zarith
-  CompiledObject: best
-
-Library Z3overlay_optim
-  FindlibName: optim
-  FindlibParent: Z3overlay
-  Build$: flag(optim)
-  Path: src/optim
-  Modules: ZZ3Optim
-  BuildDepends: Z3overlay
   CompiledObject: best
 
 ## Tests ##
@@ -49,21 +33,6 @@ Test simple
   TestTools: test_simple
   Run$: flag(tests)
 
-# Only for optim #
-Executable test_optim
-  Path: test
-  Build$: flag(tests) && flag(optim)
-  Install: false
-  MainIs: optim.ml
-  BuildDepends: Z3overlay.optim
-  CompiledObject: best
-
-Test optim
-  Command: $test_optim
-  TestTools: test_optim
-  Run$: flag(tests) && flag(optim)
-
-
 ## Doc ##
 
 Document api
@@ -73,4 +42,4 @@ Document api
   InstallDir: $htmldir/api
   BuildTools: ocamldoc
   XOCamlbuildPath: .
-  XOCamlbuildLibraries: Z3overlay, Z3overlay.optim
+  XOCamlbuildLibraries: Z3overlay
