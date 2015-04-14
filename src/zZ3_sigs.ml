@@ -1,4 +1,3 @@
-open Z3
 
 module type Context = sig
 
@@ -47,7 +46,7 @@ module type S = sig
   module T : sig
 
     val symbol : (_,'a) symbol -> 'a term
-    val simplify : ?params:Params.params -> 'a term -> 'a term
+    val simplify : ?params:Z3.Params.params -> 'a term -> 'a term
     val eq : 'a term -> 'a term -> [> zbool] term
     val distinct : 'a term list -> [> zbool] term
     val ite : [< zbool ] term -> ([< zany ] as 'a) term -> 'a term -> 'a term
@@ -144,9 +143,9 @@ module type S = sig
 
   module Solver : sig
 
-    val make : unit -> Solver.solver
+    val make : unit -> Z3.Solver.solver
 
-    val add : solver:Solver.solver -> zbool term -> unit
+    val add : solver:Z3.Solver.solver -> zbool term -> unit
 
     val check : solver:Z3.Solver.solver -> zbool term list -> sat
 
@@ -154,7 +153,7 @@ module type S = sig
 
   module Model : sig
 
-    val get_value : model:Model.model -> ('a, 'b) symbol -> 'a
+    val get_value : model:Z3.Model.model -> ('a, 'b) symbol -> 'a
 
   end
 
