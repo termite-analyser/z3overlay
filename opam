@@ -1,7 +1,14 @@
-opam-version: "1"
-maintainer: "drupyog@zoho.com"
-authors: ["Gabriel Radanne"]
+opam-version: "1.2"
+version: "dev"
+
+maintainer: "Gabriel Radanne <drupyog@zoho.com>"
+authors: "Gabriel Radanne <drupyog@zoho.com>"
+
 homepage: "https://github.com/termite-analyser/z3overlay"
+dev-repo: "https://github.com/termite-analyser/z3overlay.git"
+bug-reports: "https://github.com/termite-analyser/z3overlay/issues"
+doc: "https://termite-analyser.github.io/z3overlay/"
+
 license: "MIT"
 build: [
   ["./configure" "--prefix" prefix]
@@ -10,9 +17,11 @@ build: [
 ]
 build-doc: [[make "docs"]]
 depends: [
-  "ocamlfind"
-  "conf-z3"
+  "ocamlfind" {build}
+  "Z3" {= "dev"}
   "zarith"
+  ## Only for dev version
+  "oasis" {build}
 ]
 remove: [
   ["ocamlfind" "remove" "Z3overlay"]
