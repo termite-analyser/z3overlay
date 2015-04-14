@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="ZZ3.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="ZZ3" rel="Chapter" href="ZZ3.html">
+<link title="ZZ3_sigs" rel="Chapter" href="ZZ3_sigs.html"><title>ZZ3.Make</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="ZZ3.html" title="ZZ3">Up</a>
+&nbsp;</div>
+<h1>Functor <a href="type_ZZ3.Make.html">ZZ3.Make</a></h1>
+
+<pre><span class="keyword">module</span> Make <code class="code">(</code><code class="code"><span class="constructor">C</span></code><code class="code"> : </code><code class="type"><a href="ZZ3_sigs.Context.html">ZZ3_sigs.Context</a></code><code class="code">) </code>: <code class="type"><a href="ZZ3_sigs.S.html">ZZ3_sigs.S</a></code><code class="type"> </code></pre><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%">
+<code>C</code></td>
+<td align="center" valign="top">:</td>
+<td><code class="type"><a href="ZZ3_sigs.Context.html">ZZ3_sigs.Context</a></code>
+</table>
+</td>
+</tr>
+</table>
+<hr width="100%">
+
+<pre><span id="VALctx"><span class="keyword">val</span> ctx</span> : <code class="type">Z3.context</code></pre>
+<pre><span id="TYPEzint"><span class="keyword">type</span> <code class="type"></code>zint</span> = <code class="type">[ `Int ]</code> </pre>
+
+
+<pre><span id="TYPEzbool"><span class="keyword">type</span> <code class="type"></code>zbool</span> = <code class="type">[ `Bool ]</code> </pre>
+
+
+<pre><span id="TYPEzreal"><span class="keyword">type</span> <code class="type"></code>zreal</span> = <code class="type">[ `Real ]</code> </pre>
+
+
+<pre><span id="TYPEznum"><span class="keyword">type</span> <code class="type"></code>znum</span> = <code class="type">[ `Int | `Real ]</code> </pre>
+
+
+<pre><span id="TYPEzany"><span class="keyword">type</span> <code class="type"></code>zany</span> = <code class="type">[ `Bool | `Int | `Real ]</code> </pre>
+
+
+<pre><span id="TYPEzarray"><span class="keyword">type</span> <code class="type">('domain, 'range)</code> zarray</span> = <code class="type">[ `Zarray of 'domain * 'range ]</code> </pre>
+
+
+<pre><code><span id="TYPEtyp"><span class="keyword">type</span> <code class="type">('_, '_)</code> typ</span> = </code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTtyp.Int"><span class="constructor">Int</span></span> <span class="keyword">:</span> <code class="type">(Z.t, [> <a href="ZZ3_sigs.S.html#TYPEzint">zint</a> ]) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTtyp.Bool"><span class="constructor">Bool</span></span> <span class="keyword">:</span> <code class="type">(bool, [> <a href="ZZ3_sigs.S.html#TYPEzbool">zbool</a> ]) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTtyp.Real"><span class="constructor">Real</span></span> <span class="keyword">:</span> <code class="type">(Q.t, [> <a href="ZZ3_sigs.S.html#TYPEzreal">zreal</a> ]) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTtyp.Num"><span class="constructor">Num</span></span> <span class="keyword">:</span> <code class="type">(Q.t, [> <a href="ZZ3_sigs.S.html#TYPEznum">znum</a> ]) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTtyp.Array"><span class="constructor">Array</span></span> <span class="keyword">:</span> <code class="type">('a, 'x) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a> * ('b, 'y) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code> <span class="keyword">-></span> <code class="type">('a -> 'b, ('x, 'y) <a href="ZZ3_sigs.S.html#TYPEzarray">zarray</a>) <a href="ZZ3_sigs.S.html#TYPEtyp">typ</a></code></code></td>
+
+</tr></table>
+
+
+
+<pre><span id="TYPEterm"><span class="keyword">type</span> <code class="type">'a</code> term</span> = private <code class="type">Z3.Expr.expr</code> </pre>
+
+
+<pre><span id="TYPEsymbol"><span class="keyword">type</span> <code class="type">('a, 'b)</code> symbol</span> </pre>
+
+
+<pre><span class="keyword">module</span> <a href="ZZ3_sigs.S.Symbol.html">Symbol</a>: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.Symbol.html">..</a> <code class="code"><span class="keyword">end</span></code></pre>
+<pre><span class="keyword">module</span> <a href="ZZ3_sigs.S.T.html">T</a>: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.T.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Term constructors.
+</div>
+
+<pre><span class="keyword">module</span> <a href="ZZ3_sigs.S.Z3Array.html">Z3Array</a>: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.Z3Array.html">..</a> <code class="code"><span class="keyword">end</span></code></pre>
+<pre><code><span id="TYPEsat"><span class="keyword">type</span> <code class="type"></code>sat</span> = </code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTsat.Unsat"><span class="constructor">Unsat</span></span> <span class="keyword">of</span> <code class="type">Z3.Expr.expr Lazy.t</code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Proof<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTsat.Sat"><span class="constructor">Sat</span></span> <span class="keyword">of</span> <code class="type">Z3.Model.model Lazy.t</code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Model<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTsat.Unkown"><span class="constructor">Unkown</span></span> <span class="keyword">of</span> <code class="type">string</code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Reason<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+
+
+
+<pre><span class="keyword">module</span> <a href="ZZ3_sigs.S.Solver.html">Solver</a>: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.Solver.html">..</a> <code class="code"><span class="keyword">end</span></code></pre>
+<pre><span class="keyword">module</span> <a href="ZZ3_sigs.S.Model.html">Model</a>: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.Model.html">..</a> <code class="code"><span class="keyword">end</span></code></pre></body></html>

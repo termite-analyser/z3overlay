@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="ZZ3_sigs.S.T.html">
+<link rel="next" href="ZZ3_sigs.S.Solver.html">
+<link rel="Up" href="ZZ3_sigs.S.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="ZZ3" rel="Chapter" href="ZZ3.html">
+<link title="ZZ3_sigs" rel="Chapter" href="ZZ3_sigs.html"><title>ZZ3_sigs.S.Z3Array</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="ZZ3_sigs.S.T.html" title="ZZ3_sigs.S.T">Previous</a>
+&nbsp;<a class="up" href="ZZ3_sigs.S.html" title="ZZ3_sigs.S">Up</a>
+&nbsp;<a class="post" href="ZZ3_sigs.S.Solver.html" title="ZZ3_sigs.S.Solver">Next</a>
+</div>
+<h1>Module <a href="type_ZZ3_sigs.S.Z3Array.html">ZZ3_sigs.S.Z3Array</a></h1>
+
+<pre><span class="keyword">module</span> Z3Array: <code class="code"><span class="keyword">sig</span></code> <a href="ZZ3_sigs.S.Z3Array.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><hr width="100%">
+
+<pre><span id="VALget"><span class="keyword">val</span> get</span> : <code class="type">[< ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> ] <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       'd <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -> 'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALset"><span class="keyword">val</span> set</span> : <code class="type">[< ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> ] <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       'd <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -> [> ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> ] <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">('a -> 'b, ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a>) <a href="ZZ3_sigs.S.html#TYPEtyp">ZZ3_sigs.S.typ</a> -><br>       'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -> [> ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> ] <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALdefault"><span class="keyword">val</span> default</span> : <code class="type">[< ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> ] <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -> 'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALof_indexed"><span class="keyword">val</span> of_indexed</span> : <code class="type">typ:('a, 'r) <a href="ZZ3_sigs.S.html#TYPEtyp">ZZ3_sigs.S.typ</a> -><br>       default:'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> array -><br>       ([> <a href="ZZ3_sigs.S.html#TYPEzint">ZZ3_sigs.S.zint</a> ], 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALof_array"><span class="keyword">val</span> of_array</span> : <code class="type">typ:('a -> 'b, ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a>) <a href="ZZ3_sigs.S.html#TYPEtyp">ZZ3_sigs.S.typ</a> -><br>       default:'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       ('d <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> * 'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a>) array -><br>       ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre>
+<pre><span id="VALof_list"><span class="keyword">val</span> of_list</span> : <code class="type">typ:('a -> 'b, ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a>) <a href="ZZ3_sigs.S.html#TYPEtyp">ZZ3_sigs.S.typ</a> -><br>       default:'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> -><br>       ('d <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a> * 'r <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a>) list -><br>       ('d, 'r) <a href="ZZ3_sigs.S.html#TYPEzarray">ZZ3_sigs.S.zarray</a> <a href="ZZ3_sigs.S.html#TYPEterm">ZZ3_sigs.S.term</a></code></pre></body></html>
