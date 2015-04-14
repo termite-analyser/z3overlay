@@ -77,4 +77,4 @@ Tests are available under `test/` and built with `configure --enable-tests` and 
 
 ## Optimizing SMT solver.
 
-A branch containing an optimizing solver for z3 is available in the [`opt`](https://github.com/Z3Prover/z3/tree/opt) branch. The [`opt`](https://github.com/termite-analyser/z3overlay/tree/opt) contains an adaptation for Z3overlay.
+A branch containing an optimizing solver for z3 is available in z3's [`opt`](https://github.com/Z3Prover/z3/tree/opt) branch. z3overlay's [`opt`](https://github.com/termite-analyser/z3overlay/tree/opt) contains an adaptation for Z3overlay.
