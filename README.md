@@ -39,7 +39,8 @@ let model = match Solver.check ~solver [] with
   | Unsat _ | Unkown _ -> failwith "Oh noees"
   | Sat (lazy model) -> model
 
-(** Finally we easily get back the values in the model as inferred by Z3 without any casting! *)
+(** Finally we easily get back the values in the model as inferred by Z3
+    without any casting! *)
 let val_x = Model.get_value ~model x
 let val_y = Model.get_value ~model y
 ```
