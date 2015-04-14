@@ -10,12 +10,13 @@ bug-reports: "https://github.com/termite-analyser/z3overlay/issues"
 doc: "https://termite-analyser.github.io/z3overlay/"
 
 license: "MIT"
+
 build: [
-  ["./configure" "--prefix" prefix]
-  [make]
-  [make "install"]
+  ["ocaml" "setup.ml" "-configure" "--prefix" prefix]
+  ["ocaml" "setup.ml" "-build"]
 ]
-build-doc: [[make "docs"]]
+install: ["ocaml" "setup.ml" "-install"]
+build-doc: ["ocaml" "setup.ml" "-doc"]
 depends: [
   "ocamlfind" {build}
   "Z3" {= "dev"}
