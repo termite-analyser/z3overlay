@@ -1,7 +1,7 @@
 opam-version: "1"
 maintainer: "drupyog@zoho.com"
 authors: ["Gabriel Radanne"]
-homepage: "https://github.com/Drup/ocaml-z3"
+homepage: "https://github.com/termite-analyser/z3overlay"
 license: "MIT"
 build: [
   ["./configure" "--prefix" prefix]
@@ -11,6 +11,8 @@ build: [
 build-doc: [[make "docs"]]
 depends: [
   "ocamlfind"
+  "conf-z3"
+  "zarith"
 ]
 remove: [
   ["ocamlfind" "remove" "Z3overlay"]
