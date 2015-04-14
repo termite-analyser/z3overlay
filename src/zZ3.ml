@@ -187,7 +187,7 @@ module Make (C : Context) = struct
 
     let check ~solver l =
       let open Z3.Solver in
-      match check solver (l) with
+      match check solver l with
         | UNSATISFIABLE -> Unsat (lazy (opt_get @@ get_proof solver))
         | UNKNOWN -> Unkown (get_reason_unknown solver)
         | SATISFIABLE -> Sat (lazy (opt_get @@ get_model solver))
@@ -222,11 +222,11 @@ module Make (C : Context) = struct
 
     let check ~solver =
       let open Z3.Optimize in
-      let v = check solver in
-      let v = match v with
-        | Z3.Solver.UNSATISFIABLE -> None
-        | Z3.Solver.UNKNOWN -> None
-        | Z3.Solver.SATISFIABLE -> Some (opt_get @@ get_model solver)
+      let v = match check solver with
+        | Z3.Solver.UNSATISFIABLE ->
+          Unsat (lazy (failwith "get_proof is not implemented for optimizing solvers."))
+        | Z3.Solver.UNKNOWN -> Unkown (get_reason_unknown solver)
+        | Z3.Solver.SATISFIABLE -> Sat (lazy (opt_get @@ get_model solver))
       in v
 
   end

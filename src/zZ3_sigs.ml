@@ -181,8 +181,7 @@ module type S = sig
       solver:Z3.Optimize.optimize ->
       objective -> (Q.t, [> znum] ) symbol
 
-    val check : solver:Z3.Optimize.optimize -> Z3.Model.model option
-
+    val check : solver:Z3.Optimize.optimize -> sat
 
 
   end
