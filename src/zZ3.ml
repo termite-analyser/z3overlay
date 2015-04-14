@@ -224,9 +224,10 @@ module Make (C : Context) = struct
       let open Z3.Optimize in
       let v = check solver in
       let v = match v with
-        | Z3.Solver.UNSATISFIABLE -> None
-        | Z3.Solver.UNKNOWN -> None
-        | Z3.Solver.SATISFIABLE -> Some (opt_get @@ get_model solver)
+        (* get_proof and get_reason_unknown are not yet available *)
+        | Z3.Solver.UNSATISFIABLE -> Unsat (lazy (assert false))
+        | Z3.Solver.UNKNOWN -> Unkown ""
+        | Z3.Solver.SATISFIABLE -> Sat (lazy (opt_get @@ get_model solver))
       in v
 
   end
