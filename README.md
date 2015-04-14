@@ -1,7 +1,6 @@
-OCaml-Z3
+z3overlay -- An overlay for the OCaml Z3 binding.
 ========
 
-An overlay for the OCaml Z3 binding.
 
 [Z3](https://github.com/Z3Prover/z3) is an SMT solver developed by microsoft. A new ocaml binding is available in the branch [`unstable`](https://github.com/Z3Prover/z3/tree/unstable).
 
