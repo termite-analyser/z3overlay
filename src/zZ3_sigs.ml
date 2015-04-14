@@ -1,11 +1,13 @@
+(** Signatures for z3overlay. *)
 
+(** Input signature of the functor, only a context. *)
 module type Context = sig
 
   val ctx : Z3.context
 
 end
 
-
+(** Output signature of the functor. *)
 module type S = sig
 
   val ctx : Z3.context

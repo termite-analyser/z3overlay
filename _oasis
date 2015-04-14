@@ -34,12 +34,12 @@ Test simple
   Run$: flag(tests)
 
 ## Doc ##
-
+AlphaFeatures: ocamlbuild_more_args
 Document api
   Title: API reference for Z3
   Type: ocamlbuild (0.3)
-  Install: false
-  InstallDir: $htmldir/api
   BuildTools: ocamldoc
   XOCamlbuildPath: .
   XOCamlbuildLibraries: Z3overlay
+  XOCamlbuildExtraArgs:
+    "-docflags '-colorize-code -short-functors -charset utf-8'"
