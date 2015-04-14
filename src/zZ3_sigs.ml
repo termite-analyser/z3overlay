@@ -153,6 +153,40 @@ module type S = sig
 
   end
 
+  module Optimize : sig
+
+    type objective
+
+    val make : unit -> Z3.Optimize.optimize
+
+    val add : solver:Z3.Optimize.optimize -> zbool term -> unit
+
+    val add_soft :
+      ?id:Z3.Symbol.symbol ->
+      solver:Z3.Optimize.optimize ->
+      weight:string -> zbool term -> unit
+
+    val maximize :
+      solver:Z3.Optimize.optimize ->
+      [< znum] term -> objective
+    val minimize :
+      solver:Z3.Optimize.optimize ->
+      [< znum] term -> objective
+
+    val get_upper :
+      solver:Z3.Optimize.optimize ->
+      objective -> (Q.t, [> znum] ) symbol
+
+    val get_lower :
+      solver:Z3.Optimize.optimize ->
+      objective -> (Q.t, [> znum] ) symbol
+
+    val check : solver:Z3.Optimize.optimize -> Z3.Model.model option
+
+
+
+  end
+
   module Model : sig
 
     val get_value : model:Z3.Model.model -> ('a, 'b) symbol -> 'a
