@@ -33,6 +33,20 @@ Test simple
   TestTools: test_simple
   Run$: flag(tests)
 
+Executable test_optim
+  Path: test
+  Build$: flag(tests)
+  Install: false
+  MainIs: optim.ml
+  BuildDepends: Z3overlay
+  CompiledObject: best
+
+Test optim
+  Command: $test_optim
+  TestTools: test_optim
+  Run$: flag(tests)
+
+
 ## Doc ##
 AlphaFeatures: ocamlbuild_more_args
 Document api
