@@ -7,6 +7,7 @@ open Z
 
 
 let () =
+  Printf.printf "\nSimple test!\n%!" ;
 
   (** We create a solver for future usage. *)
   let solver = Solver.make () in

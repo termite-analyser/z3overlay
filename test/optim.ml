@@ -3,6 +3,7 @@ module ZZ3 = ZZ3.Make (struct let ctx = Z3.mk_context [] end)
 open ZZ3
 
 let _ =
+  Printf.printf "\nOptimizing test!\n%!" ;
 
   let solver = Optimize.make () in
 
