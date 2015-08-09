@@ -16,16 +16,17 @@ let _ =
 
   Optimize.add ~solver T.( t || t') ;
 
-  let o = Z3.Optimize.maximize solver (T.raw optim) in
+  let o = Optimize.maximize solver optim in
 
   let result = Optimize.check ~solver  in
 
   let model = match result with
-      | None -> failwith "truc"
-      | Some model -> model
+    | Unsat _ | Unkown _ -> failwith "Oh noees"
+    | Sat (lazy model) -> model
   in
   let vy = Model.get_value ~model y in
   let vx = Model.get_value ~model x in
 
-  let ox = Z3.Arithmetic.Real.to_decimal_string (Z3.Optimize.get_upper solver o) 4 in
-  Printf.printf "y = %s \nx = %s\nopt = %s" (Q.to_string vy) (Q.to_string vx) ox ;
+  let ox = Model.get_value ~model @@ Optimize.get_upper solver o in
+  Printf.printf "y = %s \nx = %s\nopt = %s\n"
+    (Q.to_string vy) (Q.to_string vx) (Q.to_string ox) ;
