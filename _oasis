@@ -26,7 +26,7 @@ Executable test_simple
   Install: false
   MainIs: simple.ml
   BuildDepends: Z3overlay
-  CompiledObject: best
+  CompiledObject: native
 
 Test simple
   Command: $test_simple
@@ -39,7 +39,7 @@ Executable test_optim
   Install: false
   MainIs: optim.ml
   BuildDepends: Z3overlay
-  CompiledObject: best
+  CompiledObject: native
 
 Test optim
   Command: $test_optim
