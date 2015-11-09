@@ -30,3 +30,11 @@ true: annot, bin_annot
 <test/*.ml{,i,y}>: pkg_zarith
 <test/*.ml{,i,y}>: use_Z3overlay
 # OASIS_STOP
+
+true: warn(+A-4-6-9-40-42-44)
+true: warn_error(+1..49)
+true: strict_sequence, safe_string, short_paths
+true: bin_annot
+
+# Better locations and loc in .mlis
+true: keep_locs
