@@ -10,10 +10,10 @@ let _ =
   let x = Symbol.declare Real "x" in
   let y = Symbol.declare Real "y" in
 
-  let t = T.( !y <= int 3 && !x + !y <= rat Q.(5 // 2)) in
+  let t = T.( !y <= int 3 && !x +. !y <= rat Q.(5 // 2)) in
   let t' = T.( !y >= int 4 && !y <= int 5 && !x<= int 2 ) in
 
-  let optim = T.( int 2 * !y + !x ) in
+  let optim = T.( rat Q.(~$2) *. !y +. !x ) in
 
   Optimize.add ~solver T.( t || t') ;
 

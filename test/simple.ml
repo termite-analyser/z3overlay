@@ -19,7 +19,7 @@ let () =
   (** We can define SMT formulas using an OCaml-like syntax.
       [!] transforms a symbol into a term.
   *)
-  let t = T.( !y <= int 3 && !x + !y <= rat Q.(5 // 2)) in
+  let t = T.( !y <= int 3 && !x +. !y <= rat Q.(5 // 2)) in
 
   (** We assert the formula in the SMT solver. *)
   Solver.add ~solver t ;
