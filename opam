@@ -21,8 +21,6 @@ depends: [
   "ocamlfind" {build}
   "Z3" {= "dev"}
   "zarith"
-  ## Only for dev version
-  "oasis" {build}
 ]
 remove: [
   ["ocamlfind" "remove" "Z3overlay"]
