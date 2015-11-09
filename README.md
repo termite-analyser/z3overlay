@@ -3,9 +3,9 @@ z3overlay
 
 An overlay for the OCaml Z3 binding.
 
-[Z3](https://github.com/Z3Prover/z3) is an SMT solver developed by microsoft. A new ocaml binding is available in the branch [`unstable`](https://github.com/Z3Prover/z3/tree/unstable).
+[Z3](https://github.com/Z3Prover/z3) is an SMT solver developed by microsoft.
 
-This package contains an overlay to this new official binding.
+This package contains an overlay to official binding.
 
 This overlays allows to track the type of terms in the typesystem, allowing the OCaml typechecker to check the validity of Z3 formulas and making the model extraction easier.
 
@@ -47,34 +47,7 @@ let val_y = Model.get_value ~model y
 
 ## Install
 
-The dependencies are:
-
-- Z3
-- zarith
-
-### The official bindings
-To install the official bindings, execute
 ```
-python2 scripts/mk_make.py --ml
-cd build
-make -j4
+opam remote add termite https://github.com/termite-analyser/opam-termite.git
+opam install z3overlay
 ```
-Go [take a coffee](https://xkcd.com/303/) and then:
-```
-sudo make install
-make ocamlfind_install
-```
-
-Alternatively, one can only do `make ocamlfind_install` and directs `LD_LIBRARY_PATH` to the directory containing `libz3.so` (probably `` `ocamlfind printconf destdir`/stublibs``).
-
-### z3overlay
-Once the official bindings are installed, install this package simply by `make && make install`.
-
-### Tests
-
-Tests are available under `test/` and built with `configure --enable-tests` and `make test`.
-
-
-## Optimizing SMT solver.
-
-A branch containing an optimizing solver for z3 is available in z3's [`opt`](https://github.com/Z3Prover/z3/tree/opt) branch. z3overlay's [`opt`](https://github.com/termite-analyser/z3overlay/tree/opt) contains an adaptation for Z3overlay.
