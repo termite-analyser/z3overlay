@@ -7,6 +7,22 @@ module type Context = sig
 
 end
 
+module type SOLVER = sig
+
+  type t
+  type sat
+  type _ term
+
+  val make : unit -> t
+
+  val push : t -> unit
+  val pop : t -> unit
+
+  val add : solver:t -> [`Bool] term -> unit
+  val check : solver:t -> [`Bool] term list -> sat
+
+end
+
 (** Output signature of the functor. *)
 module type S = sig
 
@@ -143,46 +159,37 @@ module type S = sig
     | Sat of Z3.Model.model Lazy.t (** Model *)
     | Unkown of string (** Reason *)
 
-  module Solver : sig
-
-    val make : unit -> Z3.Solver.solver
-
-    val add : solver:Z3.Solver.solver -> zbool term -> unit
-
-    val check : solver:Z3.Solver.solver -> zbool term list -> sat
-
-  end
+  module Solver : SOLVER
+    with type t = Z3.Solver.solver
+     and type sat := sat
+     and type 'a term := 'a term
 
   module Optimize : sig
 
-    type objective
+    include SOLVER
+      with type t = Z3.Optimize.optimize
+       and type sat := sat
+       and type 'a term := 'a term
 
-    val make : unit -> Z3.Optimize.optimize
-
-    val add : solver:Z3.Optimize.optimize -> zbool term -> unit
+    type handle
 
     val add_soft :
-      ?id:Z3.Symbol.symbol ->
-      solver:Z3.Optimize.optimize ->
-      weight:string -> zbool term -> unit
+      id:Z3.Symbol.symbol ->
+      solver:t ->
+      weight:string -> zbool term -> handle
 
     val maximize :
-      solver:Z3.Optimize.optimize ->
-      [< znum] term -> objective
+      solver:t ->
+      [< znum] term -> handle
     val minimize :
-      solver:Z3.Optimize.optimize ->
-      [< znum] term -> objective
+      solver:t ->
+      [< znum] term -> handle
 
     val get_upper :
-      solver:Z3.Optimize.optimize ->
-      objective -> (Q.t, [> znum] ) symbol
+      objective:handle -> int -> (Q.t, [> znum ]) symbol
 
     val get_lower :
-      solver:Z3.Optimize.optimize ->
-      objective -> (Q.t, [> znum] ) symbol
-
-    val check : solver:Z3.Optimize.optimize -> sat
-
+      objective:handle -> int -> (Q.t, [> znum ]) symbol
 
   end
 

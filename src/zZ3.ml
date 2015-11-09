@@ -128,7 +128,7 @@ module Make (C : Context) = struct
 
     let raw t = t
 
-    let rec with_typ : type a b . (a, b) typ -> a -> b term =
+    let with_typ : type a b . (a, b) typ -> a -> b term =
       fun ty x -> match ty with
         | Int -> bigint x
         | Real -> rat x
@@ -178,15 +178,15 @@ module Make (C : Context) = struct
 
   (** {2 Solver calls} *)
   module Solver = struct
+    include Z3.Solver
 
-    let make () =
-      Z3.Solver.mk_simple_solver ctx
+    type t = solver
 
-    let add ~solver x =
-      Z3.Solver.add solver [x]
+    let make () = mk_simple_solver ctx
+    let add ~solver x = add solver [x]
+    let pop x = pop x 1
 
     let check ~solver l =
-      let open Z3.Solver in
       match check solver l with
         | UNSATISFIABLE -> Unsat (lazy (opt_get @@ get_proof solver))
         | UNKNOWN -> Unkown (get_reason_unknown solver)
@@ -196,31 +196,30 @@ module Make (C : Context) = struct
 
   (** {2 Optimizing solver calls} *)
   module Optimize = struct
+    include Z3.Optimize
+    type t = optimize
 
-    type objective = Z3.Optimize.objective
+    let make () = mk_opt ctx
 
-    let make () =
-      Z3.Optimize.mk_optimize ctx
+    let add ~solver x = add solver [T.raw x]
 
-    let add ~solver x =
-      Z3.Optimize.add solver [T.raw x]
-
-    let add_soft ?id ~solver ~weight x =
-      ignore(Z3.Optimize.add_soft ?id solver weight (T.raw x))
+    let add_soft ~id ~solver ~weight x =
+      add_soft solver (T.raw x) weight id
 
     let minimize ~solver x =
-      Z3.Optimize.minimize solver x
+      minimize solver x
 
     let maximize ~solver x =
-      Z3.Optimize.maximize solver x
+      maximize solver x
 
-    let get_upper ~solver x =
-      Symbol.term Num (Z3.Optimize.get_upper solver x)
+    let get_upper ~objective x =
+      Symbol.term Num (get_upper objective x)
 
-    let get_lower ~solver x =
-      Symbol.term Num (Z3.Optimize.get_lower solver x)
+    let get_lower ~objective x =
+      Symbol.term Num (get_lower objective x)
 
-    let check ~solver =
+    let check ~solver l =
+      List.iter (add ~solver) l ;
       let open Z3.Optimize in
       let v = match check solver with
         | Z3.Solver.UNSATISFIABLE ->
