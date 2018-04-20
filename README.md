@@ -48,6 +48,5 @@ let val_y = Model.get_value ~model y
 ## Install
 
 ```
-opam remote add termite https://github.com/termite-analyser/opam-termite.git
-opam install z3overlay
+opam pin add z3overlay https://github.com/termite-analyser/z3overlay.git
 ```
