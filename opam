@@ -23,5 +23,5 @@ depends: [
   "zarith"
 ]
 remove: [
-  ["ocamlfind" "remove" "Z3overlay"]
+  ["ocamlfind" "remove" "z3overlay"]
 ]
