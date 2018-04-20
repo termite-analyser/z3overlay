@@ -15,7 +15,7 @@ Library Z3overlay
   Path: src
   InternalModules: ZZ3Utils
   Modules: ZZ3, ZZ3_sigs
-  BuildDepends: Z3, zarith
+  BuildDepends: z3, zarith
   CompiledObject: best
 
 ## Tests ##

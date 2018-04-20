@@ -186,10 +186,10 @@ module type S = sig
       [< znum] term -> handle
 
     val get_upper :
-      objective:handle -> int -> (Q.t, [> znum ]) symbol
+      handle -> (Q.t, [> znum ]) symbol
 
     val get_lower :
-      objective:handle -> int -> (Q.t, [> znum ]) symbol
+      handle -> (Q.t, [> znum ]) symbol
 
   end
 

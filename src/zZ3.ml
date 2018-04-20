@@ -1,5 +1,5 @@
 open ZZ3Utils
-open Z3
+open! Z3
 open ZZ3_sigs
 
 module Make (C : Context) = struct
@@ -212,11 +212,11 @@ module Make (C : Context) = struct
     let maximize ~solver x =
       maximize solver x
 
-    let get_upper ~objective x =
-      Symbol.term Num (get_upper objective x)
+    let get_upper handle =
+      Symbol.term Num (get_upper handle)
 
-    let get_lower ~objective x =
-      Symbol.term Num (get_lower objective x)
+    let get_lower handle =
+      Symbol.term Num (get_lower handle)
 
     let check ~solver l =
       List.iter (add ~solver) l ;

@@ -19,7 +19,7 @@ install: ["ocaml" "setup.ml" "-install"]
 build-doc: ["ocaml" "setup.ml" "-doc"]
 depends: [
   "ocamlfind" {build}
-  "Z3" {= "dev"}
+  "z3"
   "zarith"
 ]
 remove: [
