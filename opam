@@ -1,27 +1,25 @@
 opam-version: "1.2"
 version: "dev"
-
 maintainer: "Gabriel Radanne <drupyog@zoho.com>"
 authors: "Gabriel Radanne <drupyog@zoho.com>"
-
+license: "MIT"
 homepage: "https://github.com/termite-analyser/z3overlay"
 dev-repo: "https://github.com/termite-analyser/z3overlay.git"
 bug-reports: "https://github.com/termite-analyser/z3overlay/issues"
 doc: "https://termite-analyser.github.io/z3overlay/"
 
-license: "MIT"
-
+tags: ["smt" "Z3"]
 build: [
   ["ocaml" "setup.ml" "-configure" "--prefix" prefix]
   ["ocaml" "setup.ml" "-build"]
 ]
 install: ["ocaml" "setup.ml" "-install"]
 build-doc: ["ocaml" "setup.ml" "-doc"]
+remove: ["ocamlfind" "remove" "z3overlay"]
 depends: [
   "ocamlfind" {build}
   "z3"
   "zarith"
-]
-remove: [
-  ["ocamlfind" "remove" "z3overlay"]
+  ## OASIS is not required in released version
+  "oasis" {build & >= "0.4.4"}
 ]
