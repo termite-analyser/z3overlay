@@ -2,6 +2,10 @@ open ZZ3Utils
 open! Z3
 open ZZ3_sigs
 
+let opt_get = function
+  | None -> raise @@ Z3.Error "opt_get"
+  | Some x -> x
+
 module Make (C : Context) = struct
 
   let ctx = C.ctx
