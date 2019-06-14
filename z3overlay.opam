@@ -7,19 +7,15 @@ homepage: "https://github.com/termite-analyser/z3overlay"
 dev-repo: "https://github.com/termite-analyser/z3overlay.git"
 bug-reports: "https://github.com/termite-analyser/z3overlay/issues"
 doc: "https://termite-analyser.github.io/z3overlay/"
-
 tags: ["smt" "Z3"]
 build: [
-  ["ocaml" "setup.ml" "-configure" "--prefix" prefix]
-  ["ocaml" "setup.ml" "-build"]
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
-install: ["ocaml" "setup.ml" "-install"]
-build-doc: ["ocaml" "setup.ml" "-doc"]
-remove: ["ocamlfind" "remove" "z3overlay"]
 depends: [
-  "ocamlfind" {build}
+  "ocaml" {>= "4.03"}
+  "dune" {build}
   "z3"
   "zarith"
-  ## OASIS is not required in released version
-  "oasis" {build & >= "0.4.4"}
 ]
