@@ -1,0 +1,4 @@
+(tests
+  (names simple optim)
+  (libraries z3overlay)
+)

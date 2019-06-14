@@ -1,65 +1,33 @@
-# OASIS_START
-# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
+.PHONY: default
+default: build
 
-SETUP = ocaml setup.ml
+.PHONY: build
+build: 
+	dune build @install
 
-build: setup.data
-	$(SETUP) -build $(BUILDFLAGS)
+.PHONY: test
+test:
+	dune runtest
 
-doc: setup.data build
-	$(SETUP) -doc $(DOCFLAGS)
-
-test: setup.data build
-	$(SETUP) -test $(TESTFLAGS)
-
-all:
-	$(SETUP) -all $(ALLFLAGS)
-
-install: setup.data
-	$(SETUP) -install $(INSTALLFLAGS)
-
-uninstall: setup.data
-	$(SETUP) -uninstall $(UNINSTALLFLAGS)
-
-reinstall: setup.data
-	$(SETUP) -reinstall $(REINSTALLFLAGS)
-
+.PHONY: clean
 clean:
-	$(SETUP) -clean $(CLEANFLAGS)
+	dune clean
 
-distclean:
-	$(SETUP) -distclean $(DISTCLEANFLAGS)
+.PHONY: doc
+doc:
+	dune build @doc
 
-setup.data:
-	$(SETUP) -configure $(CONFIGUREFLAGS)
+NAME=termite-analyser/z3overlay
+DOCDIR=.gh-pages
 
-configure:
-	$(SETUP) -configure $(CONFIGUREFLAGS)
+$(DOCDIR)/.git:
+	mkdir -p $(DOCDIR)
+	cd $(DOCDIR) && (\
+		git clone -b gh-pages git@github.com:$(NAME).git . \
+	)
 
-.PHONY: build doc test all install uninstall reinstall clean distclean configure
-
-# OASIS_STOP
-
-gh-pages: doc
-	git clone `git config --get remote.origin.url` .gh-pages --reference .
-	git -C .gh-pages checkout --orphan gh-pages
-	git -C .gh-pages reset
-	git -C .gh-pages clean -dxf
-	cp -t .gh-pages/ api.docdir/*
-	git -C .gh-pages add .
-	git -C .gh-pages commit -m "Update Pages"
-	git -C .gh-pages push origin gh-pages -f
-	rm -rf .gh-pages
-
-release:
-	@if [ -z "$(VERSION)" ]; then echo "Usage: make release VERSION=1.0.0"; exit 1; fi
-	git checkout -B release
-	oasis setup
-	git add .
-	git commit -m "Generate OASIS files."
-	git tag -a v$(VERSION) -m "Version $(VERSION)"
-	git checkout @{-1}
-	git branch -D release
-	git push origin v$(VERSION)
-
-.PHONY: gh-pages release
+gh-pages: $(DOCDIR)/.git doc
+	cp -r _build/default/_doc/_html/* $(DOCDIR)/doc/dev/
+	git -C $(DOCDIR) add --all 
+	git -C $(DOCDIR) commit -a -m "gh-page updates"
+	git -C $(DOCDIR) push origin gh-pages

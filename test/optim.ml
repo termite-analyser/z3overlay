@@ -17,7 +17,7 @@ let _ =
 
   Optimize.add ~solver T.( t || t') ;
 
-  let o = Optimize.maximize solver optim in
+  let o = Optimize.maximize ~solver optim in
 
   let result = Optimize.check ~solver [] in
 
@@ -28,6 +28,6 @@ let _ =
   let vy = Model.get_value ~model y in
   let vx = Model.get_value ~model x in
 
-  let ox = Model.get_value ~model @@ Optimize.get_upper o 0 in
+  let ox = Model.get_value ~model @@ Optimize.get_upper o in
   Printf.printf "y = %s \nx = %s\nopt = %s\n"
     (Q.to_string vy) (Q.to_string vx) (Q.to_string ox) ;

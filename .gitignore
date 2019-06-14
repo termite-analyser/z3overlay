@@ -1,11 +1,3 @@
 _build
-
-setup.data
-setup.log
-setup.exe
-
-*.native
-*.byte
-*.docdir
-
-binding
+.merlin
+*.install

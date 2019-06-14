@@ -1,0 +1,7 @@
+(library
+ (name        z3overlay)
+ (public_name z3overlay)
+ (wrapped false)
+ (libraries z3 zarith)
+)
+
