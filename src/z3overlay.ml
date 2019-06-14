@@ -10,22 +10,6 @@ module type Context = sig
 
 end
 
-module type SOLVER = sig
-
-  type t
-  type sat
-  type _ term
-
-  val make : unit -> t
-
-  val push : t -> unit
-  val pop : t -> unit
-
-  val add : solver:t -> [`Bool] term -> unit
-  val check : solver:t -> [`Bool] term list -> sat
-
-end
-
 module Make (C : Context) = struct
 
   let ctx = C.ctx
@@ -200,6 +184,18 @@ module Make (C : Context) = struct
     | Sat of Z3.Model.model Lazy.t (** Model *)
     | Unkown of string (** Reason *)
 
+  module type SOLVER = sig
+    type t
+
+    val make : unit -> t
+
+    val push : t -> unit
+    val pop : t -> unit
+
+    val add : solver:t -> [> zbool] term -> unit
+    val check : solver:t -> [> zbool] term list -> sat
+  end
+  
   (** {2 Solver calls} *)
   module Solver = struct
     include Z3.Solver

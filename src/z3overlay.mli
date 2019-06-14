@@ -6,22 +6,6 @@ module type Context = sig
 
 end
 
-module type SOLVER = sig
-
-  type t
-  type sat
-  type _ term
-
-  val make : unit -> t
-
-  val push : t -> unit
-  val pop : t -> unit
-
-  val add : solver:t -> [`Bool] term -> unit
-  val check : solver:t -> [`Bool] term list -> sat
-
-end
-
 module Make (C:Context) : sig
 
   val ctx : Z3.context
@@ -157,17 +141,27 @@ module Make (C:Context) : sig
     | Sat of Z3.Model.model Lazy.t (** Model *)
     | Unkown of string (** Reason *)
 
+  module type SOLVER = sig
+
+    type t
+
+    val make : unit -> t
+
+    val push : t -> unit
+    val pop : t -> unit
+
+    val add : solver:t -> [> zbool] term -> unit
+    val check : solver:t -> [> zbool] term list -> sat
+
+  end
+  
   module Solver : SOLVER
     with type t = Z3.Solver.solver
-     and type sat := sat
-     and type 'a term := 'a term
 
   module Optimize : sig
 
     include SOLVER
       with type t = Z3.Optimize.optimize
-       and type sat := sat
-       and type 'a term := 'a term
 
     type handle
 
