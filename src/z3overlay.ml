@@ -1,6 +1,5 @@
-open ZZ3Utils
-open! Z3
-open ZZ3_sigs
+open Z3
+open Sigs
 
 let opt_get = function
   | None -> raise @@ Z3.Error "opt_get"
