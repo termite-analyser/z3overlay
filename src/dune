@@ -2,6 +2,5 @@
  (name        z3overlay)
  (public_name z3overlay)
  (libraries z3 zarith)
- (modules_without_implementation sigs)
 )
 

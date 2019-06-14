@@ -1,9 +1,30 @@
 open Z3
-open Sigs
 
 let opt_get = function
   | None -> raise @@ Z3.Error "opt_get"
   | Some x -> x
+
+module type Context = sig
+
+  val ctx : Z3.context
+
+end
+
+module type SOLVER = sig
+
+  type t
+  type sat
+  type _ term
+
+  val make : unit -> t
+
+  val push : t -> unit
+  val pop : t -> unit
+
+  val add : solver:t -> [`Bool] term -> unit
+  val check : solver:t -> [`Bool] term list -> sat
+
+end
 
 module Make (C : Context) = struct
 
