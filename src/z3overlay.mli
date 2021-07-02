@@ -6,6 +6,9 @@ module type Context = sig
 
 end
 
+type seq
+type regex
+
 module Make (C:Context) : sig
 
   val ctx : Z3.context
@@ -17,6 +20,11 @@ module Make (C:Context) : sig
   type znum = [ zint | zreal ]
   type zany = [ zint | zbool | zreal ]
 
+  type zchar = [ `Char ]
+  type 'a zseq = [ `Seq of 'a ]
+  type zstring = zchar zseq
+  type 'a zregex = [ `Regex of 'a ]
+
   type ('domain, 'range) zarray = [ `Zarray of ('domain * 'range) ]
 
   type (_,_) typ =
@@ -25,6 +33,9 @@ module Make (C:Context) : sig
     | Real : (Q.t, [> zreal]) typ
     | Num : (Q.t, [> znum] ) typ
     | Array : ('a, 'x) typ * ('b, 'y) typ -> ('a -> 'b, ('x, 'y) zarray ) typ
+    | Seq : ('a, 'x) typ -> (regex, 'x zseq) typ
+    | String : (string, zchar zseq) typ
+    | Regex : ('a, 'x) typ -> (regex, 'x zregex) typ
 
   type +'a term = private Z3.Expr.expr
 
@@ -135,7 +146,44 @@ module Make (C:Context) : sig
 
   end
 
+  module Z3Seq : sig
+    type 'a t = 'a zseq term
 
+    val empty : ('a, 'b) typ -> 'b t
+    val singleton : 'a term -> 'a t
+    val concat : 'a t list -> 'a t
+    val prefix : prefix:'a t -> 'a t -> zbool term
+    val suffix : suffix:'a t -> 'a t -> zbool term
+    val contains : 'a t -> 'a t -> zbool term
+
+    val at : 'a t -> int term -> 'a term
+    val length : 'a t -> int term
+
+    val of_string : string -> zstring term
+
+    val (@.) : 'a t -> int term -> 'a term
+  end
+
+
+  module Z3Regex : sig
+    type 'a t = 'a zregex term
+    
+    val from_seq : 'a Z3Seq.t -> 'a t
+    val in_re : 'a Z3Seq.t -> 'a t -> zbool term
+    val plus : 'a t -> 'a t
+    val star : 'a t -> 'a t
+    val option : 'a t -> 'a t
+    val union : 'a t list -> 'a t
+    val concat : 'a t list -> 'a t
+    val range : 'a term -> 'a term -> 'a t
+    val loop : 'a t -> int -> int -> 'a t
+    val inter : 'a t list -> 'a t
+    val complement : 'a t -> 'a t
+    val empty : ('a, 'b) typ -> 'a t
+    val any : ('a, 'b) typ -> 'a t
+
+  end
+  
   type sat =
     | Unsat of Z3.Expr.expr Lazy.t (** Proof *)
     | Sat of Z3.Model.model Lazy.t (** Model *)

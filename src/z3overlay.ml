@@ -10,6 +10,9 @@ module type Context = sig
 
 end
 
+type seq = unit
+type regex = unit
+
 module Make (C : Context) = struct
 
   let ctx = C.ctx
@@ -23,12 +26,20 @@ module Make (C : Context) = struct
 
   type ('domain, 'range) zarray = [ `Zarray of ('domain * 'range) ]
 
+  type zchar = [ `Char ]
+  type 'el zseq = [ `Seq of 'el ]
+  type zstring = zchar zseq
+  type 'el zregex = [ `Regex of 'el ]
+
   type (_, _) typ =
     | Int : (Z.t, [> zint]) typ
     | Bool : (bool, [> zbool]) typ
     | Real : (Q.t, [> zreal]) typ
     | Num : (Q.t, [> znum] ) typ
     | Array : ('a, 'x) typ * ('b, 'y) typ -> ('a -> 'b, ('x,'y) zarray ) typ
+    | Seq : ('a,'x) typ -> (seq, 'x zseq ) typ
+    | String : (string, zchar zseq ) typ
+    | Regex : ('a,'x) typ -> (regex, 'x zregex ) typ
 
   type +'a term = Z3.Expr.expr
 
@@ -45,6 +56,9 @@ module Make (C : Context) = struct
         | Real -> Arithmetic.Real.mk_sort ctx
         | Num -> Arithmetic.Real.mk_sort ctx
         | Array (src,dst) -> Z3Array.mk_sort ctx (sort src) (sort dst)
+        | Seq el -> Seq.mk_seq_sort ctx @@ sort el
+        | String -> Seq.mk_string_sort ctx
+        | Regex el -> Seq.mk_re_sort ctx @@ sort el
 
     let declare (type a) (type b) (ty : (a,b) typ) s : (a,b) symbol =
       match ty with
@@ -55,6 +69,9 @@ module Make (C : Context) = struct
         | Array (src,dst) ->
             Array (src,dst),
             Z3Array.mk_const_s ctx s (sort src) (sort dst)
+        | String -> String, Expr.mk_const_s ctx s (sort String)
+        | Seq el -> Seq el, Expr.mk_const_s ctx s (sort @@ Seq el)
+        | Regex el -> Regex el, Expr.mk_const_s ctx s (sort @@ Regex el)
 
     let term (type a) (type b) (ty : (a,b) typ) (e : b term) : (a,b) symbol =
       (ty, e)
@@ -142,6 +159,7 @@ module Make (C : Context) = struct
         | Real -> rat x
         | Num -> rat x
         | Bool -> bool x
+        | String | Seq _ | Regex _
         | Array (_,_) -> raise @@ Error "Can't reify an array"
 
   end
@@ -177,7 +195,43 @@ module Make (C : Context) = struct
 
   end
 
+  module Z3Seq = struct
+    type 'a t = 'a zseq term
 
+    let empty ty = Seq.mk_seq_empty ctx (Symbol.sort ty)
+    let singleton x = Seq.mk_seq_unit ctx x
+    let concat l = Seq.mk_seq_concat ctx l
+    let prefix ~prefix:l1 l2 = Seq.mk_seq_prefix ctx l1 l2
+    let suffix ~suffix:l1 l2 = Seq.mk_seq_suffix ctx l1 l2
+    let contains l1 l2 = Seq.mk_seq_contains ctx l1 l2
+
+    let at a i = Seq.mk_seq_at ctx a i
+    let length a = Seq.mk_seq_length ctx a
+
+    let of_string s = Seq.mk_string ctx s
+
+    let (@.) = at
+  end
+
+  module Z3Regex = struct
+    type 'a t = 'a zregex term
+
+    let from_seq s = Seq.mk_seq_to_re ctx s
+    let in_re s re = Seq.mk_seq_in_re ctx s re
+    let plus re = Seq.mk_re_plus ctx re
+    let star re = Seq.mk_re_star ctx re
+    let option re = Seq.mk_re_option ctx re
+    let union reL = Seq.mk_re_union ctx reL
+    let concat reL = Seq.mk_re_concat ctx reL
+    let range i j = Seq.mk_re_range ctx (Z3Seq.singleton i) (Z3Seq.singleton j)
+    let loop re i j = Seq.mk_re_loop ctx re i j
+    let inter reL = Seq.mk_re_intersect ctx (List.length reL) reL
+    let complement re = Seq.mk_re_complement ctx re
+    let empty ty = Seq.mk_re_empty ctx (Symbol.sort ty)
+    let any ty = Seq.mk_re_full ctx (Symbol.sort ty)
+
+  end
+  
 
   type sat =
     | Unsat of Z3.Expr.expr Lazy.t (** Proof *)
@@ -275,6 +329,9 @@ module Make (C : Context) = struct
               let f v = aux dst (Z3Array.get t (T.with_typ src v))
               in f
             end
+          | String -> Seq.get_string ctx @@ get_val t
+          | Seq _ -> ()
+          | Regex _ -> ()
       in aux ty t
 
   end
