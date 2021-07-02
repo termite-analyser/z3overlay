@@ -157,7 +157,7 @@ module Make (C:Context) : sig
     val contains : 'a t -> 'a t -> zbool term
 
     val at : 'a t -> int term -> 'a term
-    val length : 'a t -> int term
+    val length : 'a t -> zint term
 
     val of_string : string -> zstring term
 
