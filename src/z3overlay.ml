@@ -20,9 +20,10 @@ module Make (C : Context) = struct
   type zint  = [ `Int ]
   type zbool = [ `Bool ]
   type zreal = [ `Real ]
+  type zbitv = [ `Bitv ]
 
-  type znum = [ zint | zreal ]
-  type zany = [ zint | zbool | zreal ]
+  type znum = [ zint | zreal | zbitv ]
+  type zany = [ zbool | znum ]
 
   type ('domain, 'range) zarray = [ `Zarray of ('domain * 'range) ]
 
@@ -40,6 +41,7 @@ module Make (C : Context) = struct
     | Seq : ('a,'x) typ -> (seq, 'x zseq ) typ
     | String : (string, zchar zseq ) typ
     | Regex : ('a,'x) typ -> (regex, 'x zregex ) typ
+    | Bitvector : int -> (Z.t, zbitv) typ
 
   type +'a term = Z3.Expr.expr
 
@@ -52,6 +54,7 @@ module Make (C : Context) = struct
     let rec sort : type a b . (a,b) typ -> Sort.sort =
       function
         | Int -> Arithmetic.Integer.mk_sort ctx
+        | Bitvector i -> BitVector.mk_sort ctx i
         | Bool -> Boolean.mk_sort ctx
         | Real -> Arithmetic.Real.mk_sort ctx
         | Num -> Arithmetic.Real.mk_sort ctx
@@ -63,6 +66,7 @@ module Make (C : Context) = struct
     let declare (type a) (type b) (ty : (a,b) typ) s : (a,b) symbol =
       match ty with
         | Int -> Int, Arithmetic.Integer.mk_const_s ctx s
+        | Bitvector i -> Bitvector i, BitVector.mk_const_s ctx s i
         | Bool -> Bool, Boolean.mk_const_s ctx s
         | Real -> Real, Arithmetic.Real.mk_const_s ctx s
         | Num -> Num, Arithmetic.Real.mk_const_s ctx s
@@ -113,7 +117,7 @@ module Make (C : Context) = struct
       with _ -> failwith (Printf.sprintf "Real.mk_numeral_s parse error on %s." s)
     let i2q t = Arithmetic.Integer.mk_int2real ctx t
     let q2i t = Arithmetic.Real.mk_real2int ctx t
-
+    let bitv i x = BitVector.mk_numeral ctx (Z.to_string x) i
 
     let neg t = Arithmetic.mk_unary_minus ctx t
     let add t = Arithmetic.mk_add ctx t
@@ -159,6 +163,7 @@ module Make (C : Context) = struct
         | Real -> rat x
         | Num -> rat x
         | Bool -> bool x
+        | Bitvector i -> bitv i x
         | String | Seq _ | Regex _
         | Array (_,_) -> raise @@ Error "Can't reify an array"
 
@@ -330,6 +335,8 @@ module Make (C : Context) = struct
               in f
             end
           | String -> Seq.get_string ctx @@ get_val t
+          | Bitvector _ ->
+            Z.of_string @@ BitVector.numeral_to_string @@ get_val t
           | Seq _ -> ()
           | Regex _ -> ()
       in aux ty t

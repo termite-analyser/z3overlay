@@ -16,9 +16,10 @@ module Make (C:Context) : sig
   type zint  = [ `Int ]
   type zbool = [ `Bool ]
   type zreal = [ `Real ]
+  type zbitv = [ `Bitv ]
 
-  type znum = [ zint | zreal ]
-  type zany = [ zint | zbool | zreal ]
+  type znum = [ zint | zreal | zbitv ]
+  type zany = [ zbool | znum ]
 
   type zchar = [ `Char ]
   type 'a zseq = [ `Seq of 'a ]
@@ -36,6 +37,7 @@ module Make (C:Context) : sig
     | Seq : ('a, 'x) typ -> (regex, 'x zseq) typ
     | String : (string, zchar zseq) typ
     | Regex : ('a, 'x) typ -> (regex, 'x zregex) typ
+    | Bitvector : int -> (Z.t, zbitv) typ
 
   type +'a term = private Z3.Expr.expr
 
@@ -67,6 +69,7 @@ module Make (C:Context) : sig
     val rat : Q.t -> [> zreal ] term
     val i2q : [< zint ] term -> [> zreal ] term
     val q2i : [< zreal ] term -> [> zint ] term
+    val bitv : int -> Z.t -> [> zbitv ] term
 
     val true_ : [> zbool ] term
     val false_ : [> zbool ] term
