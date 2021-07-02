@@ -149,7 +149,7 @@ module Make (C:Context) : sig
   module Z3Seq : sig
     type 'a t = 'a zseq term
 
-    val empty : (_, 'a) typ -> 'a t
+    val empty : (_, 'a zseq) typ -> 'a t
     val singleton : 'a term -> 'a t
     val concat : 'a t list -> 'a t
     val prefix : prefix:'a t -> 'a t -> zbool term
