@@ -156,12 +156,12 @@ module Make (C:Context) : sig
     val suffix : suffix:'a t -> 'a t -> zbool term
     val contains : 'a t -> 'a t -> zbool term
 
-    val at : 'a t -> int term -> 'a term
+    val at : 'a t -> zint term -> 'a t
     val length : 'a t -> zint term
 
     val of_string : string -> zstring term
 
-    val (@.) : 'a t -> int term -> 'a term
+    val (@.) : 'a t -> zint term -> 'a t
   end
 
 
