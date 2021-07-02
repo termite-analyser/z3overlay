@@ -149,7 +149,7 @@ module Make (C:Context) : sig
   module Z3Seq : sig
     type 'a t = 'a zseq term
 
-    val empty : ('a, 'b) typ -> 'b t
+    val empty : (_, 'a zseq) typ -> 'a t
     val singleton : 'a term -> 'a t
     val concat : 'a t list -> 'a t
     val prefix : prefix:'a t -> 'a t -> zbool term
@@ -168,8 +168,8 @@ module Make (C:Context) : sig
   module Z3Regex : sig
     type 'a t = 'a zregex term
     
-    val from_seq : 'a Z3Seq.t -> 'a t
-    val in_re : 'a Z3Seq.t -> 'a t -> zbool term
+    val from_seq : (_ zseq as 'a) term -> 'a t
+    val in_re : (_ zseq as 'a) term -> 'a t -> zbool term
     val plus : 'a t -> 'a t
     val star : 'a t -> 'a t
     val option : 'a t -> 'a t
@@ -179,8 +179,8 @@ module Make (C:Context) : sig
     val loop : 'a t -> int -> int -> 'a t
     val inter : 'a t list -> 'a t
     val complement : 'a t -> 'a t
-    val empty : ('a, 'b) typ -> 'a t
-    val any : ('a, 'b) typ -> 'a t
+    val empty : (_, 'a zregex) typ -> 'a t
+    val any : (_, 'a zregex) typ -> 'a t
 
   end
   
