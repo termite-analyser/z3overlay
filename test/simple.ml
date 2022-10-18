@@ -1,5 +1,5 @@
 (* We hide the context by instanciating a functor: *)
-module Z = ZZ3.Make (struct let ctx = Z3.mk_context [] end)
+module Z = Z3overlay.Make (struct let ctx = Z3.mk_context [] end)
 
 
 (* The result of the functor is safe for opening (contains only types and modules. *)

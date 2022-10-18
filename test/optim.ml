@@ -1,5 +1,4 @@
-
-module ZZ3 = ZZ3.Make (struct let ctx = Z3.mk_context [] end)
+module ZZ3 = Z3overlay.Make (struct let ctx = Z3.mk_context [] end)
 open ZZ3
 
 let _ =
