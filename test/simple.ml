@@ -1,5 +1,6 @@
 (* We hide the context by instanciating a functor: *)
-module Z = ZZ3.Make (struct let ctx = Z3.mk_context [] end)
+module Z = Z3overlay.Make (struct let ctx = Z3.mk_context [] end)
+(* module Z = ZZ3.Make (struct let ctx = Z3.mk_context [] end) *)
 
 
 (* The result of the functor is safe for opening (contains only types and modules. *)
@@ -15,6 +16,7 @@ let () =
   (* We create new SMT variables and specify their types. *)
   let x = Symbol.declare Real "x" in
   let y = Symbol.declare Real "y" in
+  let z = Symbol.declare Bool "y" in
 
   (* We can define SMT formulas using an OCaml-like syntax.
       [!] transforms a symbol into a term.
